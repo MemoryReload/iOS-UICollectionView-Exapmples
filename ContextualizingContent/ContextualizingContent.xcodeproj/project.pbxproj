@@ -15,6 +15,7 @@
 		63CAD9032430DE2300B07803 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CAD9022430DE2300B07803 /* main.m */; };
 		63CAD90D2430DE2300B07803 /* ContextualizingContentTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CAD90C2430DE2300B07803 /* ContextualizingContentTests.m */; };
 		63CAD9192430DFC600B07803 /* AFCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CAD9182430DFC600B07803 /* AFCollectionViewController.m */; };
+		63CAD91C2430E66800B07803 /* AFPhotoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CAD91B2430E66800B07803 /* AFPhotoModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,8 @@
 		63CAD90E2430DE2300B07803 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		63CAD9172430DFC600B07803 /* AFCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFCollectionViewController.h; sourceTree = "<group>"; };
 		63CAD9182430DFC600B07803 /* AFCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AFCollectionViewController.m; sourceTree = "<group>"; };
+		63CAD91A2430E66800B07803 /* AFPhotoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFPhotoModel.h; sourceTree = "<group>"; };
+		63CAD91B2430E66800B07803 /* AFPhotoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AFPhotoModel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +93,8 @@
 				63CAD8F42430DE2100B07803 /* SceneDelegate.m */,
 				63CAD9172430DFC600B07803 /* AFCollectionViewController.h */,
 				63CAD9182430DFC600B07803 /* AFCollectionViewController.m */,
+				63CAD91A2430E66800B07803 /* AFPhotoModel.h */,
+				63CAD91B2430E66800B07803 /* AFPhotoModel.m */,
 				63CAD8F92430DE2100B07803 /* Main.storyboard */,
 				63CAD8FC2430DE2300B07803 /* Assets.xcassets */,
 				63CAD8FE2430DE2300B07803 /* LaunchScreen.storyboard */,
@@ -211,6 +216,7 @@
 				63CAD8F22430DE2100B07803 /* AppDelegate.m in Sources */,
 				63CAD9032430DE2300B07803 /* main.m in Sources */,
 				63CAD9192430DFC600B07803 /* AFCollectionViewController.m in Sources */,
+				63CAD91C2430E66800B07803 /* AFPhotoModel.m in Sources */,
 				63CAD8F52430DE2100B07803 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
