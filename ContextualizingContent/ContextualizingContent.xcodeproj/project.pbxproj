@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		636C404124330D4E00A050A5 /* AFCollectionHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 636C404024330D4E00A050A5 /* AFCollectionHeaderView.m */; };
 		63CAD8F22430DE2100B07803 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CAD8F12430DE2100B07803 /* AppDelegate.m */; };
 		63CAD8F52430DE2100B07803 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 63CAD8F42430DE2100B07803 /* SceneDelegate.m */; };
 		63CAD8FB2430DE2100B07803 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 63CAD8F92430DE2100B07803 /* Main.storyboard */; };
@@ -29,6 +30,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		636C403F24330D4E00A050A5 /* AFCollectionHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFCollectionHeaderView.h; sourceTree = "<group>"; };
+		636C404024330D4E00A050A5 /* AFCollectionHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AFCollectionHeaderView.m; sourceTree = "<group>"; };
 		63CAD8ED2430DE2100B07803 /* ContextualizingContent.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContextualizingContent.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		63CAD8F02430DE2100B07803 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		63CAD8F12430DE2100B07803 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -95,6 +98,8 @@
 				63CAD9182430DFC600B07803 /* AFCollectionViewController.m */,
 				63CAD91A2430E66800B07803 /* AFPhotoModel.h */,
 				63CAD91B2430E66800B07803 /* AFPhotoModel.m */,
+				636C403F24330D4E00A050A5 /* AFCollectionHeaderView.h */,
+				636C404024330D4E00A050A5 /* AFCollectionHeaderView.m */,
 				63CAD8F92430DE2100B07803 /* Main.storyboard */,
 				63CAD8FC2430DE2300B07803 /* Assets.xcassets */,
 				63CAD8FE2430DE2300B07803 /* LaunchScreen.storyboard */,
@@ -217,6 +222,7 @@
 				63CAD9032430DE2300B07803 /* main.m in Sources */,
 				63CAD9192430DFC600B07803 /* AFCollectionViewController.m in Sources */,
 				63CAD91C2430E66800B07803 /* AFPhotoModel.m in Sources */,
+				636C404124330D4E00A050A5 /* AFCollectionHeaderView.m in Sources */,
 				63CAD8F52430DE2100B07803 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

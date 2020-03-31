@@ -7,14 +7,21 @@
 //
 
 #import "AFCollectionViewController.h"
+#import "AFCollectionHeaderView.h"
+#import "AFPhotoModel.h"
 
 @interface AFCollectionViewController ()
-
+@property (weak, nonatomic) IBOutlet UICollectionViewFlowLayout *layout;
+@property (nonatomic,strong) NSMutableArray* selectionModelArray;
+@property (nonatomic,assign) NSUInteger currentModelArrayInex;
 @end
 
 @implementation AFCollectionViewController
+@synthesize selectionModelArray = selectionModelArray;
+@synthesize currentModelArrayInex = currentModelArrayInex;
 
-static NSString * const reuseIdentifier = @"Cell";
+static NSString * const CellIdentifier = @"Cell";
+static NSString * const HeaderIdentifier = @"Header";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -23,9 +30,9 @@ static NSString * const reuseIdentifier = @"Cell";
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Register cell classes
-    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:reuseIdentifier];
-    
-    // Do any additional setup after loading the view.
+    [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:CellIdentifier];
+    // Register Header class
+    [self.collectionView registerClass:[AFCollectionHeaderView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HeaderIdentifier];
 }
 
 /*
@@ -52,13 +59,34 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:reuseIdentifier forIndexPath:indexPath];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
     
     // Configure the cell
     
     return cell;
 }
 
+-(UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    AFCollectionHeaderView *headerView = [self.collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:HeaderIdentifier forIndexPath:indexPath];
+    if (indexPath.section ==0) {
+        //If this is the first header, display a prompt to the user
+        [headerView setText:@"Tap on a photo to start the recommendation engine."];
+    }
+    else if (indexPath.section <= currentModelArrayInex){
+        //Otherwise, display a prompt using the selected photo from the previous section
+        AFSelectionModel* selectionModel = selectionModelArray[indexPath.section -1];
+        AFPhotoModel* selectedPhotoModel = [self photoModelForIndexPath:[NSIndexPath indexPathForItem:selectionModel.selectedPhotoModelIndex inSection:indexPath.section -1]];
+        [headerView setText:[NSString stringWithFormat:@"Because you liked %@ ...",selectedPhotoModel.name]];
+    }
+    return headerView;
+}
+#pragma mark  tools
+-(AFPhotoModel*)photoModelForIndexPath:(NSIndexPath*)indexPath
+{
+    //FIXME: Add the actual implementation.
+    return nil;
+}
 #pragma mark <UICollectionViewDelegate>
 
 /*
