@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:ContextualizingContent/ContextualizingContent.xcodeproj">
+      location = "group:Dimensions/Dimensions.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Better Survey/Survey.xcodeproj">
    </FileRef>
 </Workspace>
