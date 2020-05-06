@@ -12,6 +12,7 @@
 @implementation AFCollectionViewCell
 {
     UIImageView *imageView;
+    AFCollectionViewFlowLayoutMode layoutMode;
 }
 
 - (id)initWithFrame:(CGRect)frame
@@ -43,13 +44,19 @@
     {
         return;
     }
-    
     AFCollectionViewLayoutAttributes *castedLayoutAttributes = (AFCollectionViewLayoutAttributes *)layoutAttributes;
+    layoutMode = castedLayoutAttributes.layoutMode;
+    [self setNeedsLayout];
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
     
     //start out with the detail image size of the maximum size
     CGSize imageViewSize = self.bounds.size;
     
-    if (castedLayoutAttributes.layoutMode == AFCollectionViewFlowLayoutModeAspectFit)
+    if (layoutMode == AFCollectionViewFlowLayoutModeAspectFit && imageView.image)
     {
         //Determine the size and aspect ratio for the model's image
         CGSize photoSize = imageView.image.size;
@@ -85,6 +92,8 @@
 -(void)setImage:(UIImage *)image
 {
     [imageView setImage:image];
+    
+    [self setNeedsLayout];
 }
 
 @end
