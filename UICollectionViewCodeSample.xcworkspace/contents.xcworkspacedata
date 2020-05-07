@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:Cover Flow/Cover Flow.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Dimensions/Dimensions.xcodeproj">
    </FileRef>
    <FileRef
