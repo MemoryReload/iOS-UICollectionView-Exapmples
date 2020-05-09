@@ -143,7 +143,10 @@ static NSString *AFCollectionViewFlowDecoration = @"DecorationView";
          There is a little bit tricky here. As the data source for this cell has been removed, the self.cellCount has been decreased. But the UI hasn't been updated yet. So, don't try to simply scale down the attributes with factor 0.1, because the rotation is wrong caculated. Thus we should recaculate the rotation radius with self.cellCount+1.
          */
         attributes.transform3D = CATransform3DConcat(CATransform3DMakeRotation((2 * M_PI * itemIndexPath.item / (self.cellCount + 1)), 0, 0, 1), CATransform3DMakeScale(0.1, 0.1, 1.0));
-        return attributes;
+        //code below are identical to above line.
+//        attributes.transform3D = CATransform3DScale(CATransform3DMakeRotation((2 * M_PI * itemIndexPath.item / (self.cellCount + 1)), 0, 0, 1), 0.1, 0.1, 0.1);
+//        attributes.transform3D = CATransform3DRotate(CATransform3DMakeScale(0.1, 0.1, 0.1), (2 * M_PI * itemIndexPath.item / (self.cellCount + 1)), 0, 0, 1);
+//        return attributes;
     }
     
     return attributes;
