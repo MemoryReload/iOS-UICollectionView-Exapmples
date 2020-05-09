@@ -16,14 +16,9 @@
     
     self.backgroundColor = [UIColor whiteColor];
     
-    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.colors = @[(id)[[UIColor blackColor] CGColor], (id)[[UIColor clearColor] CGColor]];
-    gradientLayer.backgroundColor = [[UIColor clearColor] CGColor];
-    gradientLayer.frame = self.bounds;
-    
-    self.layer.mask = gradientLayer;
-    
     self.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin;
+    
+    self.layer.anchorPoint = CGPointMake(0.5, 1);
     
     return self;
 }
@@ -33,7 +28,7 @@
     [super layoutSubviews];
     
     CAGradientLayer *gradientLayer = [CAGradientLayer layer];
-    gradientLayer.colors = @[(id)[[UIColor blackColor] CGColor], (id)[[UIColor clearColor] CGColor]];
+    gradientLayer.colors = @[(id)[[UIColor clearColor] CGColor] , (id)[[UIColor blackColor] CGColor]];
     gradientLayer.backgroundColor = [[UIColor clearColor] CGColor];
     gradientLayer.frame = self.bounds;
     
