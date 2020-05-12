@@ -18,7 +18,6 @@
 #import "AFSelectionModel.h"
 
 @interface AFViewController (Private)
-
 //Private method to set up the model. Treat this like a stub - pay no attention to this method.
 -(void)setupModel;
 
@@ -73,25 +72,25 @@ static NSString *HeaderIdentifier = @"HeaderIdentifier";
     [self.collectionView addGestureRecognizer:longPressGS];
 }
 
--(void)handleLongPressGesture:(UILongPressGestureRecognizer*)longPressGS
+-(BOOL)canBecomeFirstResponder
 {
-    if (longPressGS.state != UIGestureRecognizerStateRecognized) return;
-    
-    NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:[longPressGS locationInView:self.collectionView]];
-    if (!indexPath) return;
-    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
-    UIMenuItem* item = [[UIMenuItem alloc] initWithTitle:[[self photoModelForIndexPath:indexPath] name] action:@selector(handleMenuAction:)];
-    
-    UIMenuController* menuVC = [UIMenuController sharedMenuController];
-    menuVC.menuItems = @[item];
-    [menuVC setTargetRect:cell.bounds inView:cell];
-    [menuVC setMenuVisible:YES animated:NO];
+    return YES;
 }
 
--(void)handleMenuAction:(id)menuAction
+-(BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
-    
+    if (@selector(handleMenuAction:) == action && [self respondsToSelector:@selector(handleMenuAction:)] && _lastLongPressedIndexPath) {
+        return YES;
+    }
+    return [super canPerformAction:action withSender:sender];
 }
+
+//-(BOOL)canPerformAction:(SEL)action withSender:(id)sender
+//{
+//    BOOL can = [super canPerformAction:action withSender:sender];
+//    NSLog(@"send = %@, action = %@, can = %@",sender,NSStringFromSelector(action),[@(can) stringValue]);
+//    return can;
+//}
 #pragma mark - Private Custom Methods
 
 //A handy method to implement — returns the photo model at any index path
@@ -273,6 +272,34 @@ static NSString *HeaderIdentifier = @"HeaderIdentifier";
 //    }
 //}
 
+-(void)handleLongPressGesture:(UILongPressGestureRecognizer*)longPressGS
+{
+    if (longPressGS.state != UIGestureRecognizerStateBegan) return;
+    
+    NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:[longPressGS locationInView:self.collectionView]];
+    if (!indexPath) return;
+    
+    _lastLongPressedIndexPath = indexPath;
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    UIMenuItem* item = [[UIMenuItem alloc] initWithTitle:[[self photoModelForIndexPath:indexPath] name] action:@selector(handleMenuAction:)];
+    
+    UIMenuController* menuVC = [UIMenuController sharedMenuController];
+    menuVC.menuItems = @[item];
+    [menuVC setTargetRect:cell.bounds inView:cell];
+    [menuVC setMenuVisible:YES animated:NO];
+}
+
+-(void)handleMenuAction:(id)menuAction
+{
+    NSLog(@"handle Action!");
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    [pasteboard setString:[[self photoModelForIndexPath:_lastLongPressedIndexPath] name]];
+}
+
+//-(void)copy:(id)sender
+//{
+//    NSLog(@"copy Action!");
+//}
 @end
 
 

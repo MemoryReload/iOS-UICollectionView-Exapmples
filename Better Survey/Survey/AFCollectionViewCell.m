@@ -59,7 +59,7 @@
 
 -(BOOL)canBecomeFirstResponder
 {
-    NSLog(@"fucking catch ya!");
+    NSLog(@"catch you!");
     return YES;
 }
 @end
