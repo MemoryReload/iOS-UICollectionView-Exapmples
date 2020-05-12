@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:One Hundred Pixels/One Hundred Pixels.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Circle Layout/Circle Layout.xcodeproj">
    </FileRef>
    <FileRef
