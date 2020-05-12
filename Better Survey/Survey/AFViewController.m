@@ -66,6 +66,32 @@ static NSString *HeaderIdentifier = @"HeaderIdentifier";
     currentModelArrayIndex = 0;
 }
 
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    UILongPressGestureRecognizer* longPressGS = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
+    [self.collectionView addGestureRecognizer:longPressGS];
+}
+
+-(void)handleLongPressGesture:(UILongPressGestureRecognizer*)longPressGS
+{
+    if (longPressGS.state != UIGestureRecognizerStateRecognized) return;
+    
+    NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:[longPressGS locationInView:self.collectionView]];
+    if (!indexPath) return;
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    UIMenuItem* item = [[UIMenuItem alloc] initWithTitle:[[self photoModelForIndexPath:indexPath] name] action:@selector(handleMenuAction:)];
+    
+    UIMenuController* menuVC = [UIMenuController sharedMenuController];
+    menuVC.menuItems = @[item];
+    [menuVC setTargetRect:cell.bounds inView:cell];
+    [menuVC setMenuVisible:YES animated:NO];
+}
+
+-(void)handleMenuAction:(id)menuAction
+{
+    
+}
 #pragma mark - Private Custom Methods
 
 //A handy method to implement — returns the photo model at any index path
@@ -223,29 +249,29 @@ static NSString *HeaderIdentifier = @"HeaderIdentifier";
 
 #pragma mark Tap and Hold Gesture
 
--(BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return YES;
-}
-
--(BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
-    if ([NSStringFromSelector(action) isEqualToString:@"copy:"])
-    {
-        return YES;
-    }
-    
-    return NO;
-}
-
--(void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
-    if ([NSStringFromSelector(action) isEqualToString:@"copy:"])
-    {
-        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        [pasteboard setString:[[self photoModelForIndexPath:indexPath] name]];
-    }
-}
+//-(BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return YES;
+//}
+//
+//-(BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+//{
+//    if ([NSStringFromSelector(action) isEqualToString:@"copy:"])
+//    {
+//        return YES;
+//    }
+//
+//    return NO;
+//}
+//
+//-(void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+//{
+//    if ([NSStringFromSelector(action) isEqualToString:@"copy:"])
+//    {
+//        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+//        [pasteboard setString:[[self photoModelForIndexPath:indexPath] name]];
+//    }
+//}
 
 @end
 
