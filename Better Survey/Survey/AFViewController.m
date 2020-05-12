@@ -285,8 +285,12 @@ static NSString *HeaderIdentifier = @"HeaderIdentifier";
     
     UIMenuController* menuVC = [UIMenuController sharedMenuController];
     menuVC.menuItems = @[item];
-    [menuVC setTargetRect:cell.bounds inView:cell];
-    [menuVC setMenuVisible:YES animated:NO];
+    if (@available(iOS 13, *)) {
+        [menuVC showMenuFromView:cell rect:cell.bounds];
+    }else{
+        [menuVC setTargetRect:cell.bounds inView:cell];
+        [menuVC setMenuVisible:YES animated:NO];
+    }
 }
 
 -(void)handleMenuAction:(id)menuAction
@@ -296,10 +300,12 @@ static NSString *HeaderIdentifier = @"HeaderIdentifier";
     [pasteboard setString:[[self photoModelForIndexPath:_lastLongPressedIndexPath] name]];
 }
 
-//-(void)copy:(id)sender
-//{
-//    NSLog(@"copy Action!");
-//}
+-(void)copy:(id)sender
+{
+    NSLog(@"copy Action!");
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    [pasteboard setImage:[[self photoModelForIndexPath:_lastLongPressedIndexPath] image]];
+}
 @end
 
 
