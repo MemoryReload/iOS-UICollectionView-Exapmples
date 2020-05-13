@@ -174,4 +174,15 @@
     [(AFCollectionViewLayoutAttributes *)attributes setMaskingValue:maskAlpha];
 }
 
+#pragma mark - public method
+-(BOOL)isCellCenteredForIndexPath:(NSIndexPath*)indexPath
+{
+//    NSAssert(self.collectionView.bounds.origin.x ==0 || self.collectionView.bounds.origin.y ==0, @"collectionView.bounds = %@", NSStringFromCGRect(self.collectionView.bounds));
+    CGFloat collectionViewCetnerX = CGRectGetMidX(self.collectionView.bounds);
+    CGRect cellFrame = [[self layoutAttributesForItemAtIndexPath:indexPath] frame];
+    if (fabs(CGRectGetMidX(cellFrame) - collectionViewCetnerX)<1) {
+        return YES;
+    }
+    return NO;
+}
 @end

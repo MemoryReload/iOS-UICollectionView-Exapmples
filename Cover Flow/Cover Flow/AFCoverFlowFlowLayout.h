@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface AFCoverFlowFlowLayout : UICollectionViewFlowLayout
-
+-(BOOL)isCellCenteredForIndexPath:(NSIndexPath*)indexPath;
 @end
