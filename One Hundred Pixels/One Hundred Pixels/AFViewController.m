@@ -72,9 +72,9 @@ static NSString *HeaderIdentifier = @"HeaderIdentifier";
     self.upcomingPhotos = [NSMutableArray arrayWithCapacity:20];
 }
 
--(void)viewDidAppear:(BOOL)animated
+-(void)viewDidLoad
 {
-    [super viewDidAppear:animated];
+    [super viewDidLoad];
     
     void (^block)(NSDictionary *, NSError *) = ^(NSDictionary *results, NSError *error) {
         
@@ -117,12 +117,57 @@ static NSString *HeaderIdentifier = @"HeaderIdentifier";
     [PXRequest requestForPhotoFeature:PXAPIHelperPhotoFeaturePopular resultsPerPage:20 completion:block];
     [PXRequest requestForPhotoFeature:PXAPIHelperPhotoFeatureEditors resultsPerPage:20 completion:block];
     [PXRequest requestForPhotoFeature:PXAPIHelperPhotoFeatureUpcoming resultsPerPage:20 completion:block];
+    
+    UIPinchGestureRecognizer* pinchGS = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePich:)];
+    [self.collectionView addGestureRecognizer:pinchGS];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)handlePich:(UIPinchGestureRecognizer*)pinchGS
+{
+    if (self.collectionView.collectionViewLayout != self.stackLayout) return;
+    if (UIGestureRecognizerStateBegan == pinchGS.state) {
+        //start
+        NSIndexPath* touchIndex = [self.collectionView indexPathForItemAtPoint:[pinchGS locationInView:self.collectionView]];
+        if (touchIndex) {
+            self.stackLayout.pinchedStackIndex = touchIndex.section;
+        }
+    }
+    else if (UIGestureRecognizerStateChanged == pinchGS.state){
+        //move
+        self.stackLayout.pinchedStackCenter = [pinchGS locationInView:self.collectionView];
+        self.stackLayout.pinchedStackScale = pinchGS.scale;
+    }
+    else{
+        //end
+        if (self.stackLayout.pinchedStackScale >= 0) {
+            //this pinch happened on a stack,then we should open or close that stack according to the pinch scale
+            if (self.stackLayout.pinchedStackScale > 2.5) {
+                //well open the flow layout
+                [self.collectionView
+                 setCollectionViewLayout:self.flowLayout animated:YES];
+                [self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStyleBordered target:self action:@selector(goBack)] animated:YES];
+                //add these punch lines to bring stack layout back to normal state.
+                self.stackLayout.pinchedStackIndex = -1;
+                self.stackLayout.pinchedStackScale = 1.0;
+            }
+            else{
+                //animation back to normal state
+                self.stackLayout.collapsing = YES;
+                [self.collectionView performBatchUpdates:^{
+                    self.stackLayout.pinchedStackIndex = -1;
+                    self.stackLayout.pinchedStackScale = 1.0;
+                } completion:^(BOOL finished) {
+                    self.stackLayout.collapsing = NO;
+                }];
+            }
+        }
+    }
 }
 
 #pragma mark - Private Methods

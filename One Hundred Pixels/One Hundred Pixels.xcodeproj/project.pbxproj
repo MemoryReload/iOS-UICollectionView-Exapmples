@@ -239,12 +239,18 @@
 				CLASSPREFIX = AF;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Ash Furrow";
+				TargetAttributes = {
+					5E3E2E0516B9C552008FB8BF = {
+						DevelopmentTeam = Z86DT6Z4G7;
+					};
+				};
 			};
 			buildConfigurationList = 5E3E2E0116B9C552008FB8BF /* Build configuration list for PBXProject "One Hundred Pixels" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 5E3E2DFD16B9C552008FB8BF;
@@ -388,11 +394,13 @@
 		5E3E2E2A16B9C552008FB8BF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = Z86DT6Z4G7;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "One Hundred Pixels/One Hundred Pixels-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)\"/**";
 				INFOPLIST_FILE = "One Hundred Pixels/One Hundred Pixels-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "cn.com.ashfurrow.One-Hundred-Pixels";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -401,11 +409,13 @@
 		5E3E2E2B16B9C552008FB8BF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				DEVELOPMENT_TEAM = Z86DT6Z4G7;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "One Hundred Pixels/One Hundred Pixels-Prefix.pch";
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)\"/**";
 				INFOPLIST_FILE = "One Hundred Pixels/One Hundred Pixels-Info.plist";
 				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_BUNDLE_IDENTIFIER = "cn.com.ashfurrow.One-Hundred-Pixels";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

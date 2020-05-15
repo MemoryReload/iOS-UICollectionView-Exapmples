@@ -122,7 +122,7 @@
         
         if (path.section == self.pinchedStackIndex)
         {
-            int itemCount = self.itemFrames.count;
+            NSUInteger itemCount = self.itemFrames.count;
             if (path.item < itemCount)
             {
                 CGRect itemFrame = [self.itemFrames[path.item] CGRectValue];
@@ -272,7 +272,7 @@
 {
     self.itemFrames = [NSMutableArray array];
     
-    int numberOfItems = [self.collectionView numberOfItemsInSection:self.pinchedStackIndex];
+    NSInteger numberOfItems = [self.collectionView numberOfItemsInSection:self.pinchedStackIndex];
     CGFloat availableWidth = self.pageSize.width - (self.gridLayout.sectionInset.left + self.gridLayout.sectionInset.right);
     int numberOfItemsAcross = floorf((availableWidth + self.gridLayout.minimumInteritemSpacing) / (self.gridLayout.itemSize.width + self.gridLayout.minimumInteritemSpacing));
     CGFloat spacing = floorf((availableWidth - (numberOfItemsAcross * self.gridLayout.itemSize.width)) / (numberOfItemsAcross - 1));
