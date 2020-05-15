@@ -55,26 +55,29 @@
 -(NSArray*)layoutAttributesForElementsInRect:(CGRect)rect
 {
     NSArray* layoutAttributesArray = [super layoutAttributesForElementsInRect:rect];
+    NSMutableArray* newAttributesArray = [[NSMutableArray alloc] initWithCapacity:layoutAttributesArray.count];
     
     // We're going to calculate the rect of the collection view visible to the user.
     CGRect visibleRect = CGRectMake(self.collectionView.contentOffset.x, self.collectionView.contentOffset.y, CGRectGetWidth(self.collectionView.bounds), CGRectGetHeight(self.collectionView.bounds));
     
     for (UICollectionViewLayoutAttributes* attributes in layoutAttributesArray)
     {
+        UICollectionViewLayoutAttributes* newAttr = [attributes copy];
         // We're going to calculate the rect of the collection view visible to the user.
         // That way, we can avoid laying out cells that are not visible.
-        if (CGRectIntersectsRect(attributes.frame, rect))
+        if (CGRectIntersectsRect(newAttr.frame, rect))
         {
-            [self applyLayoutAttributes:attributes forVisibleRect:visibleRect];
+            [self applyLayoutAttributes:newAttr forVisibleRect:visibleRect];
         }
+        [newAttributesArray addObject:newAttr];
     }
     
-    return layoutAttributesArray;
+    return newAttributesArray;
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewLayoutAttributes *attributes = [super layoutAttributesForItemAtIndexPath:indexPath];
+    UICollectionViewLayoutAttributes *attributes = [[super layoutAttributesForItemAtIndexPath:indexPath] copy];
     
     // We're going to calculate the rect of the collection view visible to the user.
     CGRect visibleRect = CGRectMake(self.collectionView.contentOffset.x, self.collectionView.contentOffset.y, CGRectGetWidth(self.collectionView.bounds), CGRectGetHeight(self.collectionView.bounds));

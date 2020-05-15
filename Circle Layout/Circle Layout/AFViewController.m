@@ -14,6 +14,11 @@
 #import "AFCollectionViewCell.h"
 
 @interface AFViewController ()
+{
+    CGPoint _initialCenter;
+    CGPoint _initialLocation;
+    CGFloat _initialRadius;
+}
 
 @property (nonatomic, assign) NSInteger cellCount;
 
@@ -69,6 +74,30 @@ static NSString *CellIdentifier = @"CellIdentifier";
     self.layoutChangeSegmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
     [self.layoutChangeSegmentedControl addTarget:self action:@selector(layoutChangeSegmentedControlDidChangeValue:) forControlEvents:UIControlEventValueChanged];
     self.navigationItem.titleView = self.layoutChangeSegmentedControl;
+    
+    UIPinchGestureRecognizer* pichGS = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePich:)];
+    [self.collectionView addGestureRecognizer:pichGS];
+    
+    CGSize size = self.collectionView.frame.size;
+    self.circleLayout.center = CGPointMake(size.width/2, size.height/2);
+    self.circleLayout.radius = MIN(size.width, size.height) / 2.5;
+}
+
+- (void)handlePich:(UIPinchGestureRecognizer*)pichGS
+{
+    if (self.collectionView.collectionViewLayout != self.circleLayout) {
+        return;
+    }
+    if (UIGestureRecognizerStateBegan == pichGS.state) {
+        _initialCenter = self.circleLayout.center;
+        _initialRadius = self.circleLayout.radius;
+        _initialLocation = [pichGS locationInView:self.collectionView];
+    }else if (UIGestureRecognizerStateChanged == pichGS.state){
+        CGPoint newLocation = [pichGS locationInView:self.collectionView];
+        CGVector translation = CGVectorMake(newLocation.x - _initialLocation.x, newLocation.y - _initialLocation.y);
+        self.circleLayout.center = CGPointMake(_initialCenter.x+translation.dx, _initialCenter.y+translation.dy);
+        self.circleLayout.radius = _initialRadius*pichGS.scale;
+    }
 }
 
 -(BOOL)shouldAutorotate
@@ -76,7 +105,7 @@ static NSString *CellIdentifier = @"CellIdentifier";
     return YES;
 }
 
--(NSUInteger)supportedInterfaceOrientations
+-(UIInterfaceOrientationMask)supportedInterfaceOrientations
 {
     return UIInterfaceOrientationMaskAll;
 }
