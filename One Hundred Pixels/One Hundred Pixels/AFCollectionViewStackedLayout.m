@@ -300,10 +300,8 @@
         if (top >= self.pageSize.height)
             break;
     }
-    
-    int numberOfItemRows = ceilf(self.itemFrames.count / (CGFloat)numberOfItemsAcross);
-    
-    CGSize itemContentSize = CGSizeMake(self.pageSize.width, self.gridLayout.sectionInset.top + (numberOfItemRows * self.gridLayout.itemSize.height) + ((numberOfItemRows - 1) * self.gridLayout.minimumLineSpacing) + self.gridLayout.sectionInset.bottom);
+        
+    CGSize itemContentSize = CGSizeMake(self.pageSize.width, self.gridLayout.sectionInset.top + (row * self.gridLayout.itemSize.height) + ((row - 1) * self.gridLayout.minimumLineSpacing) + self.gridLayout.sectionInset.bottom);
     CGSize stackContentSize = self.contentSize;
     self.contentSize = CGSizeMake(MAX(itemContentSize.width, stackContentSize.width), MAX(itemContentSize.height, stackContentSize.height));
 }
