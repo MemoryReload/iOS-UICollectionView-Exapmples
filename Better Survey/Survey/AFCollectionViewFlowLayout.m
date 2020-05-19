@@ -60,12 +60,13 @@ NSString * const AFCollectionViewFlowLayoutBackgroundDecoration = @"DecorationId
 -(NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
 {
     NSArray *attributesArray = [super layoutAttributesForElementsInRect:rect];
-    
     NSMutableArray *newAttributesArray = [NSMutableArray array];
     
     for (UICollectionViewLayoutAttributes *attributes in attributesArray)
     {
-        [self applyLayoutAttributes:attributes];
+        UICollectionViewLayoutAttributes* newAttrs = [attributes copy];
+        [self applyLayoutAttributes:newAttrs];
+        [newAttributesArray addObject:newAttrs];
         
         if (attributes.representedElementCategory == UICollectionElementCategorySupplementaryView)
         {
@@ -74,15 +75,13 @@ NSString * const AFCollectionViewFlowLayoutBackgroundDecoration = @"DecorationId
             [newAttributesArray addObject:newAttributes];
         }
     }
-    
-    attributesArray = [attributesArray arrayByAddingObjectsFromArray:newAttributesArray];
-    
-    return attributesArray;
+    return newAttributesArray;
 }
 
 -(UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     UICollectionViewLayoutAttributes *attributes = [super layoutAttributesForItemAtIndexPath:indexPath];
+    attributes = [attributes copy];
     
     [self applyLayoutAttributes:attributes];
     

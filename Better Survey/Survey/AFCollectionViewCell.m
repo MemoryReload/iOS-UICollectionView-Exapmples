@@ -57,4 +57,9 @@
     self.backgroundColor = disabled ? [UIColor grayColor] : [UIColor whiteColor];
 }
 
+-(BOOL)canBecomeFirstResponder
+{
+    NSLog(@"catch you!");
+    return YES;
+}
 @end

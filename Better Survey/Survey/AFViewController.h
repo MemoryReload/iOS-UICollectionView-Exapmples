@@ -10,5 +10,8 @@
 
 //We add the UICollectionViewDelegateFlowLayout for some per-item customization
 @interface AFViewController : UICollectionViewController <UICollectionViewDelegateFlowLayout>
+{
+    NSIndexPath* _lastLongPressedIndexPath;
+}
 
 @end

@@ -34,17 +34,25 @@ static NSString *AFCollectionViewFlowDecoration = @"DecorationView";
     return self;
 }
 
+-(void)setCenter:(CGPoint)center
+{
+    if (CGPointEqualToPoint(_center, center)) return;
+    _center = center;
+    [self invalidateLayout];
+}
+
+-(void)setRadius:(CGFloat)radius
+{
+    if (_radius == radius) return;
+    _radius = radius;
+    [self invalidateLayout];
+}
 #pragma mark - Overridden Methods
 
 -(void)prepareLayout
 {
     [super prepareLayout];
-    
-    CGSize size = self.collectionView.bounds.size;
-    
     self.cellCount = [[self collectionView] numberOfItemsInSection:0];
-    self.center = CGPointMake(size.width / 2.0, size.height / 2.0);
-    self.radius = MIN(size.width, size.height) / 2.5;
 }
 
 -(CGSize)collectionViewContentSize

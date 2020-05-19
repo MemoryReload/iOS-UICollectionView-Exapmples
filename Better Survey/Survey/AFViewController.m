@@ -18,7 +18,6 @@
 #import "AFSelectionModel.h"
 
 @interface AFViewController (Private)
-
 //Private method to set up the model. Treat this like a stub - pay no attention to this method.
 -(void)setupModel;
 
@@ -66,6 +65,32 @@ static NSString *HeaderIdentifier = @"HeaderIdentifier";
     currentModelArrayIndex = 0;
 }
 
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    UILongPressGestureRecognizer* longPressGS = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressGesture:)];
+    [self.collectionView addGestureRecognizer:longPressGS];
+}
+
+-(BOOL)canBecomeFirstResponder
+{
+    return YES;
+}
+
+-(BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    if (@selector(handleMenuAction:) == action && [self respondsToSelector:@selector(handleMenuAction:)] && _lastLongPressedIndexPath) {
+        return YES;
+    }
+    return [super canPerformAction:action withSender:sender];
+}
+
+//-(BOOL)canPerformAction:(SEL)action withSender:(id)sender
+//{
+//    BOOL can = [super canPerformAction:action withSender:sender];
+//    NSLog(@"send = %@, action = %@, can = %@",sender,NSStringFromSelector(action),[@(can) stringValue]);
+//    return can;
+//}
 #pragma mark - Private Custom Methods
 
 //A handy method to implement — returns the photo model at any index path
@@ -223,30 +248,64 @@ static NSString *HeaderIdentifier = @"HeaderIdentifier";
 
 #pragma mark Tap and Hold Gesture
 
--(BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    return YES;
-}
+//-(BOOL)collectionView:(UICollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    return YES;
+//}
+//
+//-(BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+//{
+//    if ([NSStringFromSelector(action) isEqualToString:@"copy:"])
+//    {
+//        return YES;
+//    }
+//
+//    return NO;
+//}
+//
+//-(void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+//{
+//    if ([NSStringFromSelector(action) isEqualToString:@"copy:"])
+//    {
+//        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+//        [pasteboard setString:[[self photoModelForIndexPath:indexPath] name]];
+//    }
+//}
 
--(BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+-(void)handleLongPressGesture:(UILongPressGestureRecognizer*)longPressGS
 {
-    if ([NSStringFromSelector(action) isEqualToString:@"copy:"])
-    {
-        return YES;
-    }
+    if (longPressGS.state != UIGestureRecognizerStateBegan) return;
     
-    return NO;
-}
-
--(void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
-    if ([NSStringFromSelector(action) isEqualToString:@"copy:"])
-    {
-        UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
-        [pasteboard setString:[[self photoModelForIndexPath:indexPath] name]];
+    NSIndexPath* indexPath = [self.collectionView indexPathForItemAtPoint:[longPressGS locationInView:self.collectionView]];
+    if (!indexPath) return;
+    
+    _lastLongPressedIndexPath = indexPath;
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:indexPath];
+    UIMenuItem* item = [[UIMenuItem alloc] initWithTitle:[[self photoModelForIndexPath:indexPath] name] action:@selector(handleMenuAction:)];
+    
+    UIMenuController* menuVC = [UIMenuController sharedMenuController];
+    menuVC.menuItems = @[item];
+    if (@available(iOS 13, *)) {
+        [menuVC showMenuFromView:cell rect:cell.bounds];
+    }else{
+        [menuVC setTargetRect:cell.bounds inView:cell];
+        [menuVC setMenuVisible:YES animated:NO];
     }
 }
 
+-(void)handleMenuAction:(id)menuAction
+{
+    NSLog(@"handle Action!");
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    [pasteboard setString:[[self photoModelForIndexPath:_lastLongPressedIndexPath] name]];
+}
+
+-(void)copy:(id)sender
+{
+    NSLog(@"copy Action!");
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    [pasteboard setImage:[[self photoModelForIndexPath:_lastLongPressedIndexPath] image]];
+}
 @end
 
 

@@ -18,10 +18,10 @@
  
  */
 
-#define ACTIVE_DISTANCE         200
+#define ACTIVE_DISTANCE         300
 #define TRANSLATE_DISTANCE      200
-#define ZOOM_FACTOR             0.2f
-#define FLOW_OFFSET             40
+#define ZOOM_FACTOR             0.3f
+#define FLOW_OFFSET             -17
 #define INACTIVE_GREY_VALUE     0.6f
 
 @implementation AFCoverFlowFlowLayout
@@ -34,9 +34,9 @@
     
     // Set up our basic properties
     self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
-    self.itemSize = CGSizeMake(240, 240);
+    self.itemSize = CGSizeMake(500, 500);
     self.minimumLineSpacing = -60;      // Gets items up close to one another
-    self.minimumInteritemSpacing = 300; // Makes sure we only have 1 row of items in portrait mode
+    self.minimumInteritemSpacing = 200; // Makes sure we only have 1 row of items in portrait mode
     
     return self;
 }
@@ -55,29 +55,26 @@
 -(NSArray*)layoutAttributesForElementsInRect:(CGRect)rect
 {
     NSArray* layoutAttributesArray = [super layoutAttributesForElementsInRect:rect];
-    NSMutableArray* newAttributesArray = [[NSMutableArray alloc] initWithCapacity:layoutAttributesArray.count];
     
     // We're going to calculate the rect of the collection view visible to the user.
     CGRect visibleRect = CGRectMake(self.collectionView.contentOffset.x, self.collectionView.contentOffset.y, CGRectGetWidth(self.collectionView.bounds), CGRectGetHeight(self.collectionView.bounds));
     
     for (UICollectionViewLayoutAttributes* attributes in layoutAttributesArray)
     {
-        UICollectionViewLayoutAttributes* newAttr = [attributes copy];
         // We're going to calculate the rect of the collection view visible to the user.
         // That way, we can avoid laying out cells that are not visible.
-        if (CGRectIntersectsRect(newAttr.frame, rect))
+        if (CGRectIntersectsRect(attributes.frame, rect))
         {
-            [self applyLayoutAttributes:newAttr forVisibleRect:visibleRect];
+            [self applyLayoutAttributes:attributes forVisibleRect:visibleRect];
         }
-        [newAttributesArray addObject:newAttr];
     }
     
-    return newAttributesArray;
+    return layoutAttributesArray;
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewLayoutAttributes *attributes = [[super layoutAttributesForItemAtIndexPath:indexPath] copy];
+    UICollectionViewLayoutAttributes *attributes = [super layoutAttributesForItemAtIndexPath:indexPath];
     
     // We're going to calculate the rect of the collection view visible to the user.
     CGRect visibleRect = CGRectMake(self.collectionView.contentOffset.x, self.collectionView.contentOffset.y, CGRectGetWidth(self.collectionView.bounds), CGRectGetHeight(self.collectionView.bounds));
@@ -95,7 +92,7 @@
     CGFloat offsetAdjustment = MAXFLOAT;
     CGFloat horizontalCenter = proposedContentOffset.x + (CGRectGetWidth(self.collectionView.bounds) / 2.0);
     // Use the center to find the proposed visible rect.
-    CGRect proposedRect = CGRectMake(proposedContentOffset.x, proposedContentOffset.y, self.collectionView.bounds.size.width, self.collectionView.bounds.size.height);
+    CGRect proposedRect = CGRectMake(proposedContentOffset.x, 0.0, self.collectionView.bounds.size.width, self.collectionView.bounds.size.height);
     
     // Get the attributes for the cells in that rect.
     NSArray* array = [self layoutAttributesForElementsInRect:proposedRect];
@@ -142,20 +139,19 @@
         // We're close enough to apply the transform in relation to
         // how far away from the center we are.
         
-        //Translate along X and Z axis
         transform = CATransform3DTranslate(CATransform3DIdentity, (isLeft? - FLOW_OFFSET : FLOW_OFFSET)*ABS(distanceFromVisibleRectToItem/TRANSLATE_DISTANCE), 0, (1 - fabsf(normalizedDistance)) * 40000 + (isLeft? 200 : 0));
+        
         // Set the perspective of the transform.
         transform.m34 = -1/(4.6777 * self.itemSize.width);
-        //Rotate along Y axis
-        transform = CATransform3DRotate(transform, (isLeft? 1 : -1) * fabsf(normalizedDistance) * 45 * M_PI / 180, 0, 1, 0);
-        //Scale along X and Z axis
-        CGFloat zoom = 1 + ZOOM_FACTOR*(1 - ABS(normalizedDistance));
-        transform = CATransform3DScale(transform, zoom, zoom, 1);
         
+        // Set the zoom factor.
+        CGFloat zoom = 1 + ZOOM_FACTOR*(1 - ABS(normalizedDistance));
+        transform = CATransform3DRotate(transform, (isLeft? 1 : -1) * fabsf(normalizedDistance) * 45 * M_PI / 180, 0, 1, 0);
+        transform = CATransform3DScale(transform, zoom, zoom, 1);
         attributes.zIndex = 1;
-
+        
         CGFloat ratioToCenter = (ACTIVE_DISTANCE - fabsf(distanceFromVisibleRectToItem)) / ACTIVE_DISTANCE;
-        //Interpolate between 0.0f and INACTIVE_GREY_VALUE
+        // Interpolate between 0.0f and INACTIVE_GREY_VALUE
         maskAlpha = INACTIVE_GREY_VALUE + ratioToCenter * (-INACTIVE_GREY_VALUE);
     }
     else
@@ -166,26 +162,13 @@
         transform = CATransform3DTranslate(transform, isLeft? -FLOW_OFFSET : FLOW_OFFSET, 0, 0);
         transform = CATransform3DRotate(transform, (isLeft? 1 : -1) * 45 * M_PI / 180, 0, 1, 0);
         attributes.zIndex = 0;
-
+        
         maskAlpha = INACTIVE_GREY_VALUE;
     }
     
     attributes.transform3D = transform;
     
-    // Rasterize the cells for smoother edges.
-    [(AFCollectionViewLayoutAttributes *)attributes setShouldRasterize:YES];
     [(AFCollectionViewLayoutAttributes *)attributes setMaskingValue:maskAlpha];
 }
 
-#pragma mark - public method
--(BOOL)isCellCenteredForIndexPath:(NSIndexPath*)indexPath
-{
-//    NSAssert(self.collectionView.bounds.origin.x ==0 || self.collectionView.bounds.origin.y ==0, @"collectionView.bounds = %@", NSStringFromCGRect(self.collectionView.bounds));
-    CGFloat collectionViewCetnerX = CGRectGetMidX(self.collectionView.bounds);
-    CGRect cellFrame = [[self layoutAttributesForItemAtIndexPath:indexPath] frame];
-    if (fabs(CGRectGetMidX(cellFrame) - collectionViewCetnerX)<1) {
-        return YES;
-    }
-    return NO;
-}
 @end

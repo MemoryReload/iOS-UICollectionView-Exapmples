@@ -79,8 +79,36 @@ static NSString *CellIdentifier = @"CellIdentifier";
     layoutChangeSegmentedControl.segmentedControlStyle = UISegmentedControlStyleBar;
     [layoutChangeSegmentedControl addTarget:self action:@selector(layoutChangeSegmentedControlDidChangeValue:) forControlEvents:UIControlEventValueChanged];
     self.navigationItem.titleView = layoutChangeSegmentedControl;
+    
+    UITapGestureRecognizer* tapGS = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
+    [self.collectionView addGestureRecognizer:tapGS];
 }
 
+-(void)handleTapGesture:(UIGestureRecognizer*)tapGS
+{
+    if (self.collectionView.collectionViewLayout != coverFlowCollectionViewLayout) {
+        return;
+    }
+    CGPoint touchP = [tapGS locationInView:self.collectionView];
+    NSIndexPath* touchIndexPath = [self.collectionView indexPathForItemAtPoint:touchP];
+    if (!touchIndexPath) {
+        return;
+    }
+    UICollectionViewCell* cell = [self.collectionView cellForItemAtIndexPath:touchIndexPath];
+    if ([coverFlowCollectionViewLayout isCellCenteredForIndexPath:touchIndexPath]) {
+        //centered, so do flip animation
+        [UIView transitionWithView:cell duration:0.5 options:UIViewAnimationOptionTransitionFlipFromRight animations:^{
+            cell.bounds = cell.bounds;
+        } completion:nil];
+    }
+    else{
+        //not centered, then do recacluation center stuff
+        CGPoint prefferedContentOffset = self.collectionView.contentOffset;
+        prefferedContentOffset.x = CGRectGetMidX(cell.frame) - CGRectGetWidth(self.collectionView.frame)/2;
+        prefferedContentOffset = [coverFlowCollectionViewLayout targetContentOffsetForProposedContentOffset:prefferedContentOffset withScrollingVelocity:CGPointZero];
+        [self.collectionView setContentOffset:prefferedContentOffset animated:YES];
+    }
+}
 #pragma mark - Private Custom Methods
 
 //A handy method to implement — returns the photo model at any index path
