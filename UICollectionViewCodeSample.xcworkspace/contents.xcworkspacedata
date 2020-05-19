@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:DynamicAnimator/DynamicAnimator.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:LayoutTransition/LayoutTransition.xcodeproj">
    </FileRef>
    <FileRef

@@ -39,5 +39,4 @@ static NSString *CellIdentifier = @"Cell";
     viewController.useLayoutToLayoutNavigationTransitions = YES;
     [self.navigationController pushViewController:viewController animated:YES];
 }
-
 @end
